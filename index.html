@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Fight-no-Flight</title>
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- <link rel="stylesheet" href="css/pygment_trac.css"> -->
+  <!-- <link rel="stylesheet" href="css/tomorrow-night.css"> -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+  <script>Josh = {Debug: true };</script>
+  <script src="js/vendor/backbone/backbone.js"></script>
+  <script src="js/vendor/backbone/backbone-indexeddb.js"></script>
+  <script src="js/vendor/josh/history.js"></script>
+  <script src="js/vendor/josh/killring.js"></script>
+  <script src="js/vendor/josh/readline.js"></script>
+  <script src="js/vendor/josh/input.js"></script>
+  <script src="js/vendor/josh/shell.js"></script>
+  <script src="js/vendor/jquery.parse.min.js  "></script>
+  <script src="js/app.js"></script>
+  <script src="js/airport.js"></script>
+</head>
+<body style="margin-left:10px;margin-top:10px">
+  <h2>Fight-no-Flight</h2>  
+<div id="shell-panel">
+  <div>Type <code>help</code> or hit <code>TAB</code> for a list of commands.</div>
+  <div id="shell-view"></div>
+</div>
+<a target="_new" href="https://github.com/sdether/josh.js">Using CLI library - Josh.js</a>
+
+<script>
+var history = new Josh.History({ key: 'fnf.history'});
+var shell = Josh.Shell({history: history});
+// window.anAirport = new Airport({name:"YYZ"});
+// anAirport.save({});
+shell.setCommandHandler("searchFlights", {
+    exec: function(cmd, args, callback) {
+        var arg = args[0] || '';
+        callback("response");
+    }
+});
+shell.setCommandHandler("searchAirport", {
+    exec: function(cmd, args, callback) {
+        var arg = args[0] || '';
+        callback("response");
+    }
+});
+
+
+shell.activate();
+
+</script>
+</body>
+</html>
