@@ -12,6 +12,11 @@ Airport.airportCodeHash = {};
 Airport.airportCityHash = {};
 Airport._all = [];
 
+
+// --
+// Class methods below
+// --
+
 /**
  * Airport.hasData()
  */
