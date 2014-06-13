@@ -15,20 +15,17 @@ var Provider = Backbone.Model.extend({
   getDestination: function() {
     return this.get("Destination");
   },
+  departureTime: function () {
+    return this.get("Departure Time").replace("-","/");
+  },
+  destinationTime: function () {
+    return this.get("Destination Time").replace("-","/");
+  },
   departureEpoc: function() { 
-    return moment(this.get("Departure Time")).utc().valueOf();
+    return moment(this.departureTime()).utc().valueOf();
   },
   destinationEpoc: function() { 
-    return moment(this.get("Destination Time")).utc().valueOf();
-  },
-  /*
-   * getOriginTime()
-   */
-  getOriginTime: function () {
-    var airportCode = this.getOrigin();
-    var originAirport = Airport.withCode(airportCode);
-    var tz = originAirport.get("timezone")
-    return moment(""+this.get("Departure Time") + " " + Airport.withCode(airportCode).timezoneOffset());
+    return moment(this.destinationTime()).utc().valueOf();
   },
   formattedTime: function(momentDate) {
     return momentDate.format("MM/DD/YYYY HH:mm:ss");
@@ -40,13 +37,24 @@ var Provider = Backbone.Model.extend({
     return this.formattedTime(this.getDestinationTime());
   },
   /*
+   * getOriginTime()
+   */
+  getOriginTime: function () {
+    var airportCode = this.getOrigin();
+    var originAirport = Airport.withCode(airportCode);
+    var tz = originAirport.get("timezone");
+    var dateAsString = ""+this.departureTime() + " " + Airport.withCode(airportCode).timezoneOffset();
+    return moment(dateAsString);
+  },
+  /*
    * getDestinationTime()
    */
   getDestinationTime: function () {
     var airportCode = this.getDestination();
     var destAirport = Airport.withCode(airportCode);
-    var tz = destAirport.get("timezone")
-    return moment(""+this.get("Destination Time") + " " + Airport.withCode(airportCode).timezoneOffset());
+    var tz = destAirport.get("timezone");
+    var dateAsString = ""+this.destinationTime() + " " + Airport.withCode(airportCode).timezoneOffset();
+    return moment(dateAsString);
   },
   /*
    * flightTime()
@@ -57,7 +65,7 @@ var Provider = Backbone.Model.extend({
     var duration = moment.utc(moment(b,"DD/MM/YYYY h:mm").diff(moment(a,"DD/MM/YYYY h:mm"))).format("h:mm");
     return duration.replace(":","h ") + "m"    
   },
-  key: function (){
+  getKey: function (){
     if (!this._key) {
       this._key = Provider.generateKey(this);
     }
@@ -90,12 +98,12 @@ Provider.storeCSVRows = function(csvRows) {
  * Provider.keepCheapest()
  */
 Provider.keepCheapest = function (provider) {
-  var currentPrice = Provider.all[provider.key()].getPrice();
+  var currentPrice = Provider.all[provider.getKey()].getPrice();
   var comparePrice = provider.getPrice();
 
   // Does the duplicate have a better price?
   if (comparePrice < currentPrice) {
-    Provider.all[key] = provider;
+    Provider.all[provider.getKey()] = provider;
   }
 }
 
@@ -104,9 +112,9 @@ Provider.keepCheapest = function (provider) {
  */
 Provider.store = function (provider) {
     // Does this model exist in the global array?
-    if (!Provider.all[provider.key()]) {
+    if (!Provider.all[provider.getKey()]) {
       // No - Store it
-      Provider.all[provider.key()] = provider;
+      Provider.all[provider.getKey()] = provider;
       // Cache the providers for fast lookup by origin and destination codes
       Provider.cacheByOrigin(provider);
       Provider.cacheByDestination(provider);
@@ -124,11 +132,13 @@ Provider.store = function (provider) {
  * (i.e. 742304834212_397497928239_JFK_YEG)
  */
 Provider.generateKey = function(provider) {
+    // var providerKey = "##Departure Time_##Destination Time_##Origin_##Destination_##Price";
     var providerKey = "##Departure Time_##Destination Time_##Origin_##Destination";
     providerKey = providerKey.replace("##Departure Time", provider.departureEpoc());
     providerKey = providerKey.replace("##Destination Time", provider.destinationEpoc());
     providerKey = providerKey.replace("##Origin", provider.getOrigin());
     providerKey = providerKey.replace("##Destination", provider.getDestination());
+    //providerKey = providerKey.replace("##Price", provider.getPrice());
     return providerKey;
 }
 

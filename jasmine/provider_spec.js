@@ -2,6 +2,7 @@
 describe("Provider spec", function() {
   Provider.ASYNC_MODE = false;
   Provider.loadFromCSV("../data/provider3.txt");
+  // LAS|6/15/2014 9:54:00|LAX|6/15/2014 11:05:00|$286.00
   var exampleProvider = Provider.all['1402840440000_1402844700000_LAS_LAX'];
 
   describe("Provider.loadFromCSV", function() {    
