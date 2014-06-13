@@ -60,6 +60,13 @@ describe("Provider spec", function() {
     });
   }); 
 
+  describe("flightsBetween()", function() {    
+    it("will return a sorted array of flights between the origin and destination.", function () {
+      expect(Provider.flightsBetween("LAS","LAX").length).toBeGreaterThan(0);
+    }); 
+  });
+
+
   describe("#getOriginTime()", function() {    
     it("will get the origin UTC date/time for a provider", function () {
       expect(exampleProvider).toBeDefined();

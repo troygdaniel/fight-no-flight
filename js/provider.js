@@ -30,6 +30,15 @@ var Provider = Backbone.Model.extend({
     var tz = originAirport.get("timezone")
     return moment(""+this.get("Departure Time") + " " + Airport.withCode(airportCode).timezoneOffset());
   },
+  formattedTime: function(momentDate) {
+    return momentDate.format("MM/DD/YYYY HH:mm:ss");
+  },
+  formattedOriginTime: function () {
+    return this.formattedTime(this.getOriginTime());
+  },
+  formattedDestinationTime: function () {
+    return this.formattedTime(this.getDestinationTime());
+  },
   /*
    * getDestinationTime()
    */
@@ -166,6 +175,29 @@ Provider.clear = function () {
   Provider.all = {};
   Provider.originHash = {};
   Provider.destHash = {};
+}
+
+Provider.flightsBetween = function (originCode, destinationCode) {
+  var flights = Provider.flightsWithOrigin(originCode);
+  var matchedFlights = [];
+  for (var i = flights.length - 1; i >= 0; i--) {
+    var flightDestCode = flights[i].get("Destination");
+    if (flightDestCode === destinationCode) {
+      matchedFlights.push(flights[i]);
+    }
+  }
+  return flights.sort(
+    firstBy(function (a,b) {
+      if (a.getPrice() < b.getPrice()) return -1;
+      if (a.getPrice() > b.getPrice()) return 1;
+      return 0;
+    }).
+    thenBy(function (a,b){
+      if (a.departureEpoc() < b.departureEpoc()) return -1;
+      if (a.departureEpoc() > b.departureEpoc()) return 1;
+      return 0;
+    })
+    );
 }
 
 /*

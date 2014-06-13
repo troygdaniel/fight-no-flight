@@ -20,7 +20,8 @@
   <script src="js/vendor/josh/shell.js"></script>
   <script src="js/vendor/jquery.parse.min.js  "></script>
   <script src="js/vendor/moment.min.js"></script>
-
+  <script src="js/vendor/then_by.min.js"></script>
+  
   <script src="js/app.js"></script>
   <script src="js/airport.js"></script>
   <script src="js/provider.js"></script>
@@ -59,28 +60,24 @@ shell.setCommandHandler("searchFlights", {
         var dest = findArgument("-d",args);
         var response;
         if (!origin || !dest) {
-          response = "Missing required arguments:<BR>-o   Origin Airport Code<BR>   -d   Destination Airport Code<br/><br/>Example usage:<br/>$ searchFlights -o YYZ -d LAS<br/>";
+          response = "Missing required arguments:<BR>-o   Origin Airport Code<BR>   -d   Destination Airport Code<br/><br/>Example usage:<br/>$ searchFlights -o LAS -d LAX<br/>";
         }
         else {
           response = "Searching for flights from '"+origin+"' to '"+dest+"'";
-          var flights = Provider.flightsWithOrigin(origin);
-          for (var i = flights.length - 1; i >= 0; i--) {
-            var destinationCode = flights[i].get("Destination");
-            if (destinationCode === dest) {              
-              response  += "<br/>"
-                        + flights[i].get("Origin")
-                        + " --> " + destinationCode 
-                        + " (" + flights[i].getOriginTime().format()
-                        + " --> "
-                        + flights[i].getDestinationTime().format()
-                        + ") - "
-                        + flights[i].flightTime() + " - "
-                        + flights[i].get("Price")
-                        + ")";
-            }
+          var flights = Provider.flightsBetween(origin, dest);
+          for (var i = 0; i <= flights.length - 1; i++) {
+            response  += "<br/>"
+                      + flights[i].get("Origin")
+                      + " --> " + dest 
+                      + " (" + flights[i].formattedOriginTime()
+                      + " --> "
+                      + flights[i].formattedDestinationTime()
+                      + ") - "
+                      + flights[i].flightTime() + " - "
+                      + flights[i].get("Price")
+                      + ")";
           };
         }
-
         callback(response);
     }
 });
