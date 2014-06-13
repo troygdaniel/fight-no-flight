@@ -22,7 +22,7 @@ describe("Airport spec", function() {
 
     it("will fetch all Toronto airports.", function () {
       Airport.fetchAirportsByCity("Toronto", function(airports) {
-        var codes = [];      
+        var codes = [];
         for (var i = airports.length - 1; i >= 0; i--) {
           codes.push(airports[i].get("iata_faa"));
         }
