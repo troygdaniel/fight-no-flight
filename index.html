@@ -30,6 +30,8 @@
   <h2>Fight-no-Flight</h2>  
 <div id="shell-panel">
   <div>Type <code>help</code> or hit <code>TAB</code> for a list of commands.</div>
+  <div id="flight-loading-airports">Loading Airports...</div>
+  <div id="flight-loading-providers">Loading Providers...</div>
   <div id="shell-view"></div>
 </div>
 <a target="_new" href="https://github.com/sdether/josh.js">Using CLI library - Josh.js</a>
@@ -37,23 +39,68 @@
 <script>
 var history = new Josh.History({ key: 'fnf.history'});
 var shell = Josh.Shell({history: history});
-// window.anAirport = new Airport({name:"YYZ"});
-// anAirport.save({});
+
+Airport.loadFromCSV(function(){
+  $("#flight-loading-airports").text(""+Airport.count()+" airports loaded.");
+});
+Provider.loadFromCSV("data/provider1.txt", function() {
+  $("#flight-loading-providers").text("Loading "+Provider.count()+" providers...");
+});
+Provider.loadFromCSV("data/provider2.txt", function() {
+  $("#flight-loading-providers").text("Loading "+Provider.count()+" providers...");
+});
+Provider.loadFromCSV("data/provider3.txt", function() {
+  $("#flight-loading-providers").text(""+Provider.count()+" providers loaded.");
+});
+
 shell.setCommandHandler("searchFlights", {
     exec: function(cmd, args, callback) {
         var arg = args[0] || '';
-        callback("response");
-    }
-});
-shell.setCommandHandler("searchAirport", {
-    exec: function(cmd, args, callback) {
-        var arg = args[0] || '';
-        callback("response");
-    }
-});
+        var origin = findArgument("-o",args);
+        var dest = findArgument("-d",args);
+        var response;
+        if (!origin || !dest) {
+          response = "Missing required arguments:<BR>-o   Origin Airport Code<BR>   -d   Destination Airport Code<br/><br/>Example usage:<br/>$ searchFlights -o YYZ -d LAS<br/>";
+        }
+        else {
+          response = "Searching for flights from '"+origin+"' to '"+dest+"'";
+          var flights = Provider.flightsWithOrigin(origin);
+          for (var i = flights.length - 1; i >= 0; i--) {
+            var destinationCode = flights[i].get("Destination");
+            if (destinationCode === dest) {              
+              response  += "<br/>"
+                        + flights[i].get("Origin")
+                        + " --> " + destinationCode 
+                        + " (" + flights[i].getOriginTime().format()
+                        + " --> "
+                        + flights[i].getDestinationTime().format()
+                        + ") - "
+                        + flights[i].flightTime() + " - "
+                        + flights[i].get("Price")
+                        + ")";
+            }
+          };
+        }
 
+        callback(response);
+    }
+});
+shell.setCommandHandler("airport", {
+    exec: function(cmd, args, callback) {
+        callback("response");
+    }
+});
 
 shell.activate();
+
+function findArgument(option, args) {
+  for (var i = args.length - 1; i >= 0; i--) {
+    if (args[i] === option) {
+      return args[i+1];
+    }    
+  }
+  return false;
+}
 
 </script>
 </body>

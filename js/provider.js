@@ -126,7 +126,7 @@ Provider.generateKey = function(provider) {
 /*
  * Provider.cacheByOrigin()
  */
- Provider.cacheByOrigin = function (provider) {
+Provider.cacheByOrigin = function (provider) {
   // Setup convenient access for providers by origin
   if (!Provider.originHash[provider.getOrigin()])
     Provider.originHash[provider.getOrigin()] = [provider];
@@ -137,7 +137,7 @@ Provider.generateKey = function(provider) {
 /*
  * Provider.cacheByDestination()
  */
- Provider.cacheByDestination = function (provider) {
+Provider.cacheByDestination = function (provider) {
   // Setup convenient access for providers by destination
   if (!Provider.destHash[provider.getDestination()])
     Provider.destHash[provider.getDestination()] = [provider];
