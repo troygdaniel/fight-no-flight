@@ -9,7 +9,7 @@ var ProviderListView = Backbone.View.extend({
               + "-d   Destination Airport Code<br/><br/>"
               + "Example usage:<br/>$ searchFlights -o LAS -d LAX<br/>";
 
-    var flights = Provider.flightsBetween(origin, dest);
+    var flights = ProviderSearch.flightsBetween(origin, dest);
     if (!flights || flights.length===0) {
       return "No matches found.";
     }

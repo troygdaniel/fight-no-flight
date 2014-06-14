@@ -1,72 +1,30 @@
 //  Specs for Take.NoteView
-describe("Provider spec", function() {
+describe("Provider model spec", function() {
   Provider.ASYNC_MODE = false;
-  Provider.loadFromCSV("../data/provider3.txt");
+  ProviderList.loadFromCSV("../data/provider3.txt");
   // LAS|6/15/2014 9:54:00|LAX|6/15/2014 11:05:00|$286.00
   var exampleProvider = Provider.all['1402840440000_1402844700000_LAS_LAX'];
-
-  describe("Provider.loadFromCSV", function() {    
-
-    it("loads the example 'Provider1.txt' ", function () {
-      Provider.clear();      
-      Provider.loadFromCSV("../data/provider1.txt", function(_providers) {
-          expect(Provider.count()).toEqual(8);
-          expect(_providers).toEqual = Provider.all;          
-      });
-    });
-
-    it("loads the example 'provider2.txt' ", function () {
-      Provider.clear();
-      Provider.loadFromCSV("../data/provider2.txt", function(_providers) {
-          expect(Provider.count()).toEqual(13);
-          expect(_providers).toEqual = Provider.all;          
-      });
-    });
-    
-    it("loads the example 'provider3.txt' ", function () {
-      Provider.clear();
-      Provider.loadFromCSV("../data/provider3.txt", function(_providers) {
-          expect(Provider.count()).toEqual(14);
-          expect(_providers).toEqual = Provider.all;          
-      });
-    });
-    
-    it("loads all examples and ignores duplicates ", function () {
-      Provider.clear();
-      Provider.loadFromCSV("../data/provider1.txt");
-      Provider.loadFromCSV("../data/provider2.txt");
-      Provider.loadFromCSV("../data/provider3.txt");
-      expect(Provider.count()).toEqual(33);
-      Provider.loadFromCSV("../data/provider3.txt");
-      expect(Provider.count()).toEqual(33);
-    }); 
-
-  });
-        
-  describe("Provider.flightsWithOrigin", function() {    
-
-    it("finds", function () {
-      Provider.clear();
-      Provider.loadFromCSV("../data/provider3.txt", function(_providers) {
-          expect(Provider.flightsWithOrigin("YYZ").length).toEqual(3);
-      });
-    }); 
-
-  });
-
-  describe("Provider.flightsWithDestination", function() {    
-    Provider.clear();
-    Provider.loadFromCSV("../data/provider3.txt", function(_providers) {
-      expect(Provider.flightsWithDestination("YYZ").length).toEqual(4);
-    });
-  }); 
-
-  describe("flightsBetween()", function() {    
-    it("will return a sorted array of flights between the origin and destination.", function () {
-      expect(Provider.flightsBetween("LAS","LAX").length).toBeGreaterThan(0);
-    }); 
-  });
-
+  var validFields = {
+      "Origin": "LAS",
+      "Departure Time": "6/15/2014 9:54:00",
+      "Destination": "LAX",
+      "Destination Time": "6/15/2014 11:05:00",
+      "Price": "$321.00"
+  };
+  var invalidFields = {
+      "Orin": "LAS",
+      "Deture Time": "6/15/2014 9:54:00",
+      "Detination": "LAX",
+      "Dstation Time": "6/15/2014 11:05:00",
+      "Pre": "$321.00"
+  };
+  var invalidValues = {
+      "Origin": "123",
+      "Departure Time": "whattimeisitmrwolf",
+      "Destination": "123",
+      "Destination Time": "whattimeisitmrwolf",
+      "Price": "dontask"
+  };
 
   describe("#getOriginTime()", function() {    
     it("will get the origin UTC date/time for a provider", function () {
@@ -91,6 +49,30 @@ describe("Provider spec", function() {
   describe("#getPrice()", function() {    
     it("will return price as a numeric value", function () {
       expect(exampleProvider.getPrice()).toEqual(286);
+    }); 
+  });
+
+  describe("#validate()", function() {        
+    // TOOO: find a way to test this
+    // invalidProvider.on("invalid", function(model, error) {
+    //   expect(error).toEqual("Missing mandatory fields: {Origin},{Departure Time},{Destination},{Destination Time},{Price}");
+    // });
+
+    it("will expect all fields to be provided", function () {
+      var validProvider = new Provider(validFields);
+      expect(validProvider.isValid()).toEqual(true);
+    }); 
+
+    it("will fail validation if there are any missing fields", function () {
+      var invalidProvider = new Provider(invalidFields);
+      expect(invalidProvider.isValid()).toEqual(false);
+      expect(invalidProvider.validationError).toEqual("Missing mandatory fields: {Origin},{Departure Time},{Destination},{Destination Time},{Price}");
+    }); 
+
+    it("(pending) will fail validation if there are any missing values", function () {
+      var invalidProvider = new Provider(invalidValues);
+      expect(invalidProvider.isValid()).toEqual(false);
+      expect(invalidProvider.validationError).toEqual("Invalid values for attributes.");
     }); 
   });
 
