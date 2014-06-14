@@ -8,11 +8,11 @@ CLI desktop browser can be found here:
 http://troygdaniel.com/fight-no-flight/
 
 There are 5 relevant classes:
-- __Airport__ ...
-- __Provider__ ...
-- __ProviderList__ ...
-- __ProviderSearch__ ...
-- __ProviderListView__ ...
+- __Airport__ both a backbone model, and class methods to load all data
+- __Provider__ the backbone model for the provider csv row
+- __ProviderList__ manages access to the global (in-memory) array of providers
+- __ProviderSearch__ provides searching capability based on origin and destination
+- __ProviderListView__ renders simple CLI text responses
 
 Here is how you would implement the above classes:
 ```javascript
