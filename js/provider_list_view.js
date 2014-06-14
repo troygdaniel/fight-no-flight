@@ -10,7 +10,9 @@ var ProviderListView = Backbone.View.extend({
               + "Example usage:<br/>$ searchFlights -o LAS -d LAX<br/>";
 
     var flights = Provider.flightsBetween(origin, dest);
-
+    if (!flights || flights.length===0) {
+      return "No matches found.";
+    }
     for (var i = 0; i <= flights.length - 1; i++) {
       response  += this.cliFlightRow(flights[i]);
     }

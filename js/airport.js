@@ -68,7 +68,7 @@ Airport.fetchAirportByCode = function (code, callback) {
  * WARNING: Assumes that loadFromCSV has returned from async call
  */
 Airport.withCode = function(code) {
-  return Airport.airportCodeHash[code];
+  return Airport.airportCodeHash[code.toUpperCase()];
 }
 /*
  * Airport.fetchAirportsByCity()

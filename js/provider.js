@@ -22,7 +22,6 @@ var Provider = Backbone.Model.extend({
     return this.get("Destination Time").replace(/\-/g,'/');
   },
   departureEpoc: function() { 
-    console.log(this.departureTime());
     return moment(this.departureTime()).utc().valueOf();
   },
   destinationEpoc: function() { 
@@ -119,7 +118,6 @@ Provider.keepCheapest = function (provider) {
  */
 Provider.store = function (provider) {
     // Does this model exist in the global array?
-    console.log(provider.getKey() + " " + provider.get("Price"));
     if (!Provider.all[provider.getKey()]) {
       // No - Store it
       Provider.all[provider.getKey()] = provider;
@@ -176,14 +174,14 @@ Provider.cacheByDestination = function (provider) {
  * Provider.flightsWithOrigin(code)
  */
 Provider.flightsWithOrigin = function (code) {
-  return Provider.originHash[code];
+  return Provider.originHash[code.toUpperCase()];
 }
 
 /*
  * Provider.flightsWithDestination(code)
  */
 Provider.flightsWithDestination = function (code) {
-  return Provider.destHash[code];
+  return Provider.destHash[code.toUpperCase()];
 }
 
 /*
@@ -198,6 +196,8 @@ Provider.clear = function () {
 Provider.flightsBetween = function (originCode, destinationCode) {
   var flights = Provider.flightsWithOrigin(originCode);
   var matchedFlights = [];
+  if (!flights) return;
+
   for (var i = flights.length - 1; i >= 0; i--) {
     var flightDestCode = flights[i].get("Destination");
 
@@ -245,7 +245,6 @@ Provider.loadFromCSV = function (filename, callback) {
     success: function(data) {
       // parse the airport.txt as a csv file
       var provider_csv = $.parse(data,{header: true});
-      console.log("Loading " + filename + " and ignoring duplicates:");
       Provider.storeCSVRows(provider_csv.results.rows);
 
       if (callback) callback(Provider.all);
