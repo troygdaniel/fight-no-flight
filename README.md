@@ -55,7 +55,7 @@ var provider = new Provider(validFields);
 // Validation can be called at anytime to check to state of the model
 var isValid = provider.isValid(); 
 provider.on("invalid", function(model, error) {
-    alert(error');
+    alert(error);
 });
 // Persists the model in the Provider.all global array
 provider.save();
