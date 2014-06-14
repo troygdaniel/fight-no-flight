@@ -16,12 +16,13 @@ var Provider = Backbone.Model.extend({
     return this.get("Destination");
   },
   departureTime: function () {
-    return this.get("Departure Time").replace("-","/");
+    return this.get("Departure Time").replace(/\-/g,'/');
   },
   destinationTime: function () {
-    return this.get("Destination Time").replace("-","/");
+    return this.get("Destination Time").replace(/\-/g,'/');
   },
   departureEpoc: function() { 
+    console.log(this.departureTime());
     return moment(this.departureTime()).utc().valueOf();
   },
   destinationEpoc: function() { 
@@ -95,10 +96,8 @@ Provider.destHash = {};
  */
 Provider.storeCSVRows = function(csvRows) { 
     for (var i = 0; i < csvRows.length; i++) {       
-
-    // Create backbone model to represent provider
-    var provider = new Provider(csvRows[i]);    
-    Provider.store(provider);
+      // Create backbone model to represent provider
+      Provider.store(new Provider(csvRows[i]));
   }
 }
 
@@ -120,6 +119,7 @@ Provider.keepCheapest = function (provider) {
  */
 Provider.store = function (provider) {
     // Does this model exist in the global array?
+    console.log(provider.getKey() + " " + provider.get("Price"));
     if (!Provider.all[provider.getKey()]) {
       // No - Store it
       Provider.all[provider.getKey()] = provider;
@@ -245,6 +245,7 @@ Provider.loadFromCSV = function (filename, callback) {
     success: function(data) {
       // parse the airport.txt as a csv file
       var provider_csv = $.parse(data,{header: true});
+      console.log("Loading " + filename + " and ignoring duplicates:");
       Provider.storeCSVRows(provider_csv.results.rows);
 
       if (callback) callback(Provider.all);
