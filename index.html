@@ -25,6 +25,7 @@
   <script src="js/app.js"></script>
   <script src="js/airport.js"></script>
   <script src="js/provider.js"></script>
+  <script src="js/provider_list_view.js"></script>
 </head>
 <body style="margin-left:10px;margin-top:10px">
   <h2>Fight-no-Flight</h2>  
@@ -40,6 +41,7 @@
 var history = new Josh.History({ key: 'fnf.history'});
 var shell = Josh.Shell({history: history});
 
+
 Airport.loadFromCSV(function(){
   $("#flight-loading-airports").text(""+Airport.count()+" airports loaded.");
 });
@@ -53,37 +55,27 @@ Provider.loadFromCSV("data/provider3.txt", function() {
   $("#flight-loading-providers").text(""+Provider.count()+" providers loaded.");
 });
 
+var providerListView = new ProviderListView();
+
 shell.setCommandHandler("searchFlights", {
     exec: function(cmd, args, callback) {
         var arg = args[0] || '';
         var origin = findArgument("-o",args);
         var dest = findArgument("-d",args);
-        var response;
-        if (!origin || !dest) {
-          response = "Missing required arguments:<BR>-o   Origin Airport Code<BR>   -d   Destination Airport Code<br/><br/>Example usage:<br/>$ searchFlights -o LAS -d LAX<br/>";
-        }
-        else {
-          response = "Searching for flights from '"+origin+"' to '"+dest+"'";
-          var flights = Provider.flightsBetween(origin, dest);
-          for (var i = 0; i <= flights.length - 1; i++) {
-            response  += "<br/>"
-                      + flights[i].get("Origin")
-                      + " --> " + dest 
-                      + " (" + flights[i].formattedOriginTime()
-                      + " --> "
-                      + flights[i].formattedDestinationTime()
-                      + ") - "
-                      + flights[i].flightTime() + " - "
-                      + flights[i].get("Price")
-                      + ")";
-          };
-        }
+        var response = providerListView.flightsBetween(origin, dest);
         callback(response);
     }
 });
 shell.setCommandHandler("airport", {
     exec: function(cmd, args, callback) {
-        callback("response");
+        var airport = Airport.withCode(args[0])
+        var response = 
+                  airport.get("name")+", "
+                + airport.get("city")+", " 
+                + airport.get("country")
+                + " ["+airport.get("timezone")+":00]";
+
+        callback(response);
     }
 });
 

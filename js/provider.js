@@ -31,29 +31,37 @@ var Provider = Backbone.Model.extend({
     return momentDate.format("MM/DD/YYYY HH:mm:ss");
   },
   formattedOriginTime: function () {
-    return this.formattedTime(this.getOriginTime());
+    return this.formattedTime(this.getOriginTime(true));
   },
   formattedDestinationTime: function () {
-    return this.formattedTime(this.getDestinationTime());
+    return this.formattedTime(this.getDestinationTime(true));
   },
   /*
    * getOriginTime()
    */
-  getOriginTime: function () {
+  getOriginTime: function (asLocalTime) {
     var airportCode = this.getOrigin();
     var originAirport = Airport.withCode(airportCode);
     var tz = originAirport.get("timezone");
-    var dateAsString = ""+this.departureTime() + " " + Airport.withCode(airportCode).timezoneOffset();
+    var dateAsString = ""+this.departureTime();
+
+    if (!asLocalTime)
+       dateAsString += " " + Airport.withCode(airportCode).timezoneOffset();
+
     return moment(dateAsString);
   },
   /*
    * getDestinationTime()
    */
-  getDestinationTime: function () {
+  getDestinationTime: function (asLocalTime) {
     var airportCode = this.getDestination();
     var destAirport = Airport.withCode(airportCode);
     var tz = destAirport.get("timezone");
-    var dateAsString = ""+this.destinationTime() + " " + Airport.withCode(airportCode).timezoneOffset();
+    var dateAsString = ""+this.destinationTime();
+
+    if (!asLocalTime)
+       dateAsString += " " + Airport.withCode(airportCode).timezoneOffset();
+
     return moment(dateAsString);
   },
   /*
@@ -192,11 +200,12 @@ Provider.flightsBetween = function (originCode, destinationCode) {
   var matchedFlights = [];
   for (var i = flights.length - 1; i >= 0; i--) {
     var flightDestCode = flights[i].get("Destination");
-    if (flightDestCode === destinationCode) {
+
+    if (destinationCode === flightDestCode) {
       matchedFlights.push(flights[i]);
     }
   }
-  return flights.sort(
+  return matchedFlights.sort(
     firstBy(function (a,b) {
       if (a.getPrice() < b.getPrice()) return -1;
       if (a.getPrice() > b.getPrice()) return 1;
