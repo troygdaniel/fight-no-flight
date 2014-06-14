@@ -99,17 +99,27 @@ Provider.missingAttributes = function (attrs){
     ||  !attrs["Price"]) === true;
 }
 Provider.invalidAttributes = function (attrs){
-  var isValid = true;
+  var isInvalid = true;
     
-    // Is the Origin field alphanumeric?
-    isValid = ( isNaN(parseInt(attrs["Origin"])) === true);
+    // Is the Origin field invalid?
+    isInvalid = ( isNaN(parseInt(attrs["Origin"])) === true);
+    isInvalid = ( attrs["Origin"].length > 3  || attrs["Origin"].length < 3 );
 
-    // ||  !attrs["Departure Time"] 
-    // ||  !attrs["Departure Time"] 
-    // ||  !attrs["Destination"] 
-    // ||  !attrs["Destination Time"] 
-    // ||  !attrs["Price"]) === true;
-  return !isValid;
+    // Is the Destination field invalid?
+    isInvalid = ( isNaN(parseInt(attrs["Destination"])) === true);
+    isInvalid = ( attrs["Destination"].length > 3  || attrs["Destination"].length < 3 );
+
+    // Is the Departure Time invalid?
+    isInvalid = ( moment(attrs["Departure Time"].replace(/\-/g,'/')).format() === "Invalid date");    
+
+    // Is the Destination Time invalid?
+    isInvalid = ( moment(attrs["Destination Time"].replace(/\-/g,'/')).format() === "Invalid date");
+    
+    // Is the price invalid?
+    var price = attrs["Price"].substring(1,attrs["Price"].length);
+    isInvalid = ( isNaN (parseFloat(price)) === true);
+
+  return isInvalid;
 }
 Provider.ASYNC_MODE = true;
 Provider.all = {};
