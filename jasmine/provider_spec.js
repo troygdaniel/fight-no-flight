@@ -40,9 +40,9 @@ describe("Provider model spec", function() {
     });
   });
 
-  describe("#flightTime()", function() {    
+  describe("#flightDuration()", function() {    
     it("will calculate the flight time for a flight ", function () {
-      expect(exampleProvider.flightTime()).toEqual("1h 11m");      
+      expect(exampleProvider.flightDuration()).toEqual("1h 11m");      
     }); 
   });
 

@@ -56,14 +56,14 @@ Airport.hasData = function() {
     return true;
   else
     return false;
-}
+};
 
 /*
  * Return the number of airports currenly loaded
  */
 Airport.count = function() {
   return Airport.all.length;
-}
+};
 
 /* 
  * Airport.fetchAirportByCode()
@@ -88,7 +88,7 @@ Airport.fetchAirportByCode = function (code, callback) {
     // Execute callback and provide airport for the given code
     callback(Airport.airportCodeHash[code]);
   } 
-}
+};
 
 /* 
  * Airport.withCode()
@@ -98,7 +98,7 @@ Airport.fetchAirportByCode = function (code, callback) {
 Airport.withCode = function(code) {
   if (typeof code === "undefined") return;
   return Airport.airportCodeHash[code.toUpperCase()];
-}
+};
 
 /* 
  * Airport.fetchAirportsByCity()
@@ -121,7 +121,7 @@ Airport.fetchAirportsByCity = function(city, callback) {
     // Execute callback and provide airport for the given city
     callback(Airport.airportCityHash[city]);
   }   
-}
+};
 
 /* 
  * Airport.storeCSVRows()
@@ -136,7 +136,7 @@ Airport.storeCSVRows = function(csvRows) {
     var airport = new Airport(csvRow);
     Airport.store(airport, csvRow);
   }
-}
+};
 
 /* 
  * Airport.store()
@@ -156,7 +156,7 @@ Airport.storeCSVRows = function(csvRows) {
     // YES - add to the existing array
     Airport.airportCityHash[csvRow.city].push(airport);
   }
-}
+};
 
 /*
  * Airport.loadFromCSV()
@@ -179,4 +179,4 @@ Airport.loadFromCSV = function (callback) {
       if (callback) callback();
     }
  });
-}
+};

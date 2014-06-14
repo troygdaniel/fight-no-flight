@@ -15,30 +15,37 @@ var Provider = Backbone.Model.extend({
   getDestination: function() {
     return this.get("Destination");
   },
+  // Get the Departure Time, and replace the '-' character with '/'
+  // i.e. '6-23-2014' becomes '6/23/2014'
   departureTime: function () {
     return this.get("Departure Time").replace(/\-/g,'/');
   },
+  // Get the Destination Time, and replace the '-' character with '/'
   destinationTime: function () {
     return this.get("Destination Time").replace(/\-/g,'/');
   },
+  // Return a numeric value of "Departure time" for comparison and calculations
   departureEpoc: function() { 
     return moment(this.departureTime()).utc().valueOf();
   },
+  // Return a numeric value of "Destination time" for comparison and calculations
   destinationEpoc: function() { 
     return moment(this.destinationTime()).utc().valueOf();
   },
+  // Format a moment.js date
   formattedTime: function(momentDate) {
     return momentDate.format("MM/DD/YYYY HH:mm:ss");
   },
+  // The formatted "Departure time"
   formattedOriginTime: function () {
     return this.formattedTime(this.getOriginTime(true));
   },
+  // The formatted "Destination time"
   formattedDestinationTime: function () {
     return this.formattedTime(this.getDestinationTime(true));
   },
-  /*
-   * getOriginTime()
-   */
+  // Moment.js date for "Departure time"
+  // asLocalTime - allows the return value to be either UTC or local time
   getOriginTime: function (asLocalTime) {
     var airportCode = this.getOrigin();
     var originAirport = Airport.withCode(airportCode);
@@ -50,9 +57,8 @@ var Provider = Backbone.Model.extend({
 
     return moment(dateAsString);
   },
-  /*
-   * getDestinationTime()
-   */
+  // Moment.js date for "Destination time"
+  // asLocalTime - allows the return value to be either UTC or local time
   getDestinationTime: function (asLocalTime) {
     var airportCode = this.getDestination();
     var destAirport = Airport.withCode(airportCode);
@@ -64,27 +70,24 @@ var Provider = Backbone.Model.extend({
 
     return moment(dateAsString);
   },
-  /*
-   * flightTime()
-   */
-  flightTime: function () {
+  // The duration of the flight between the origin and destination
+  // i.e.  5h 33m
+  flightDuration: function () {
     var a = this.getOriginTime();
     var b = this.getDestinationTime();
     var duration = moment.utc(moment(b,"DD/MM/YYYY h:mm").diff(moment(a,"DD/MM/YYYY h:mm"))).format("h:mm");
-    return duration.replace(":","h ") + "m"    
+    return duration.replace(":","h ") + "m";
   },
-  /*
-   *  getKey()
-   */
+  // The unique key representing the provider, based on departure and destination time
+  // i.e. "1402840440000_1402844700000_LAS_LAX"
   getKey: function (){
     if (!this._key) {
       this._key = ProviderList.generateKey(this);
     }
     return this._key;
   },
-  /*
-   *  validate()
-   */
+  // Validation to ensure model model is in a valid state
+  // Is automatically invoked on .save() - but can be called with provider.isValid()
   validate: function (attrs, options) {    
     if (Provider.missingAttributes(attrs)) {
       return "Missing mandatory fields: {Origin},{Departure Time},{Destination},{Destination Time},{Price}";
@@ -93,10 +96,8 @@ var Provider = Backbone.Model.extend({
       return "Invalid values for attributes.";
     }    
   },
-  /*
-   *  sync()
-   *  
-   */
+  // Over-riding the sync method
+  // Allows us to persist the models in the ProviderList array
   sync: function(method, model, options) {
       options || (options = {});
 
@@ -113,22 +114,20 @@ var Provider = Backbone.Model.extend({
   }
 });
 
-/*
- *  Provider.missingAttributes()
- */
+// Convienience method to check for missing attributes
+// ...called by validate()
 Provider.missingAttributes = function (attrs){
   return (     
-        !attrs["Origin"] 
-    ||  !attrs["Departure Time"] 
-    ||  !attrs["Departure Time"] 
-    ||  !attrs["Destination"] 
-    ||  !attrs["Destination Time"] 
-    ||  !attrs["Price"]) === true;
-}
+        !attrs["Origin"]  ||  
+        !attrs["Departure Time"] ||  
+        !attrs["Departure Time"] ||  
+        !attrs["Destination"] ||  
+        !attrs["Destination Time"] ||  
+        !attrs["Price"]) === true;
+};
 
-/*
- *  Provider.invalidAttributes()
- */
+// Convienience method to check for invalid attributes
+// ...called by validate()
 Provider.invalidAttributes = function (attrs){
   var isInvalid = true;
     
@@ -151,7 +150,7 @@ Provider.invalidAttributes = function (attrs){
     isInvalid = ( isNaN (parseFloat(price)) === true);
 
   return isInvalid;
-}
+};
 
 // Class variables
 Provider.ASYNC_MODE = true;

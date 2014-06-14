@@ -1,30 +1,26 @@
 ProviderSearch = {};
 
-/*
- * ProviderSearch.flightsWithOrigin(code)
- */
+// Returns an array of flights originating from an airport
 ProviderSearch.flightsWithOrigin = function (code) {
   return Provider.originHash[code.toUpperCase()];
-}
+};
 
-/*
- * ProviderSearch.flightsWithDestination(code)
- */
+// Returns an array of flights destined to an airport
 ProviderSearch.flightsWithDestination = function (code) {
   return Provider.destHash[code.toUpperCase()];
-}
+};
 
-/*
- * ProviderSearch.flightsWithDestination(code)
- */
+// Returns an array of flights travelling between an origin and destination
 ProviderSearch.flightsBetween = function (originCode, destinationCode) {
   var flights = ProviderSearch.flightsWithOrigin(originCode);
   var matchedFlights = [];
   if (!flights) return;
 
+  // Iterate through a list of flights from the provided origin
   for (var i = flights.length - 1; i >= 0; i--) {
-    var flightDestCode = flights[i].get("Destination");
 
+    var flightDestCode = flights[i].get("Destination");
+    // Simple comparison to identify flights with matching destination
     if (destinationCode === flightDestCode) {
       matchedFlights.push(flights[i]);
     }
@@ -41,4 +37,4 @@ ProviderSearch.flightsBetween = function (originCode, destinationCode) {
       return 0;
     })
     );
-}
+};
