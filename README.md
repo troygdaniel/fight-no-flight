@@ -34,7 +34,7 @@ var textResponse = providerListView.flightsBetween("YYZ", "YYC");
 // YYZ --> YYC (06/15/2014 06:45:00 --> 06/15/2014 08:54:00) - 4h 09m - $578.00
 // YYZ --> YYC (06/22/2014 12:00:00 --> 06/22/2014 14:09:00) - 4h 09m - $630.00
 // YYZ --> YYC (06/26/2014 12:00:00 --> 06/26/2014 14:09:00) - 4h 09m - $630.00
-
+```
 
 The Airport model can be used to lookup an airport, assuming that the async load is complete.
 ```javascript
@@ -59,7 +59,6 @@ provider.on("invalid", function(model, error) {
 });
 // Persists the model in the Provider.all global array
 provider.save();
-
 ```
 
 The classes and instance variable names were intentionally lifted from the requirements to maintain the same shared understanding of the problem.
