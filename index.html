@@ -69,16 +69,13 @@ shell.setCommandHandler("searchFlights", {
 shell.setCommandHandler("airport", {
     exec: function(cmd, args, callback) {
         var airport = Airport.withCode(args[0])
-        if (!args[0]) {
-          callback("Please provide the airport code as a single argument.<BR>Example:<br>$ airport YYZ");
-        }
-        var response = "Airport '"+args[0].toUpperCase()+"' not found.";
-        if (airport){
-          response = 
-            airport.get("name")+", "
-          + airport.get("city")+", " 
-          + airport.get("country")
-          + " ["+airport.get("timezone")+":00]";
+        var response = "Please provide the airport code as a single argument.<BR>Example:<br>$ airport YYZ";
+
+        if (args[0]) { 
+          response = "Airport '"+args[0].toUpperCase()+"' not found.";
+          if (airport) {
+            response =  airport.get("name")+", " + airport.get("city")+", " + airport.get("country") + " ["+airport.get("timezone")+":00]";
+          }
         }
         callback(response);
     }
