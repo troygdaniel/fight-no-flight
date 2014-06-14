@@ -73,14 +73,19 @@ var Provider = Backbone.Model.extend({
     var duration = moment.utc(moment(b,"DD/MM/YYYY h:mm").diff(moment(a,"DD/MM/YYYY h:mm"))).format("h:mm");
     return duration.replace(":","h ") + "m"    
   },
+  /*
+   *  getKey()
+   */
   getKey: function (){
     if (!this._key) {
       this._key = ProviderList.generateKey(this);
     }
     return this._key;
   },
-  validate: function (attrs, options) {
-    console.log("Provider#validate()");
+  /*
+   *  validate()
+   */
+  validate: function (attrs, options) {    
     if (Provider.missingAttributes(attrs)) {
       return "Missing mandatory fields: {Origin},{Departure Time},{Destination},{Destination Time},{Price}";
     }    
@@ -88,7 +93,29 @@ var Provider = Backbone.Model.extend({
       return "Invalid values for attributes.";
     }    
   },
+  /*
+   *  sync()
+   *  
+   */
+  sync: function(method, model, options) {
+      options || (options = {});
+
+      switch (method) {
+          case "update":
+              ProviderList.store(this);
+              break;
+          case "create":
+              ProviderList.store(this);
+              break;
+      }
+      if (options.url)
+          return Backbone.sync.call(model, method, model, options);
+  }
 });
+
+/*
+ *  Provider.missingAttributes()
+ */
 Provider.missingAttributes = function (attrs){
   return (     
         !attrs["Origin"] 
@@ -98,6 +125,10 @@ Provider.missingAttributes = function (attrs){
     ||  !attrs["Destination Time"] 
     ||  !attrs["Price"]) === true;
 }
+
+/*
+ *  Provider.invalidAttributes()
+ */
 Provider.invalidAttributes = function (attrs){
   var isInvalid = true;
     
@@ -121,6 +152,8 @@ Provider.invalidAttributes = function (attrs){
 
   return isInvalid;
 }
+
+// Class variables
 Provider.ASYNC_MODE = true;
 Provider.all = {};
 Provider.originHash = {};

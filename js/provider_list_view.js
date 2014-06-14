@@ -1,5 +1,11 @@
+/*
+ *  ProviderListView Backbone view 
+ */
 var ProviderListView = Backbone.View.extend({
   
+  /*
+   *  flightsBetween()
+   */
   flightsBetween: function(origin, dest) {
     var response = "Searching for flights from '"+origin+"' to '"+dest+"'<br/>";
 
@@ -18,6 +24,9 @@ var ProviderListView = Backbone.View.extend({
     }
     return response;
   },
+  /*
+   *  cliFlightRow()
+   */
   cliFlightRow: function(flight) {
       var cliTemplate = "##Origin --> ##Destination (##Departure Time --> ##Destination Time) - ##FlightTime - ##FlightPrice";
       cliTemplate = cliTemplate.replace("##Origin",flight.get("Origin"));

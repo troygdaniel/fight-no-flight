@@ -16,7 +16,7 @@ describe("Airport spec", function() {
     it("will fetch the Tokyo airport with an airport code of NRT.", function () {
         Airport.fetchAirportByCode("NRT", function(airport) {
           expect(airport.get("name")).toEqual("Narita Intl");  
-        });        
+        });
     });
 
 

@@ -2,27 +2,54 @@
  * Airport Backbone Model
  */
 var Airport = Backbone.Model.extend({  
+  /*  
+   *  timezoneOffset()
+   *  Return the airport's time zone, with DST conversion
+   */  
   timezoneOffset: function() {
     var tz = this.get("timezone");
     if (Date.isNowDst()) {
       tz++;
     }
     return tz +":00";
+  },
+  /*  
+   *  sync()
+   *  Over-ride the backbone save() method
+   */
+  sync: function(method, model, options) {
+      options || (options = {});
+
+      if (method === "create") {
+        Airport.all.push(this);
+      }
+              
+      if (options.url)
+        return Backbone.sync.call(model, method, model, options);
   }
 });
 
+// Configure the data source
 Airport.DATA_URL = "data/airports.txt";
+// Allow async/sync config - mostly for tests
 Airport.ASYNC_MODE = true;
+
+// fast lookup by code
 Airport.airportCodeHash = {};
+// fast lookup by city
 Airport.airportCityHash = {};
+// the entire dataset of airports
 Airport.all = [];
 
-// --------------------
-// Class methods below
-// --------------------
+
+// -------------
+// Class methods 
+// -------------
+
 
 /*
  * Airport.hasData()
+ * Check to see if there is any data loaded
  */
 Airport.hasData = function() {
   if (Airport.all.length > 0) 
@@ -32,14 +59,15 @@ Airport.hasData = function() {
 }
 
 /*
- * Airport.count()
+ * Return the number of airports currenly loaded
  */
 Airport.count = function() {
   return Airport.all.length;
 }
 
-/*
+/* 
  * Airport.fetchAirportByCode()
+ * Fetch an airport model given a code  
  */
 Airport.fetchAirportByCode = function (code, callback) {
   
@@ -62,18 +90,20 @@ Airport.fetchAirportByCode = function (code, callback) {
   } 
 }
 
-/*
+/* 
  * Airport.withCode()
- * 
+ * Return an airport model given a code  
  * WARNING: Assumes that loadFromCSV has returned from async call
  */
 Airport.withCode = function(code) {
   if (typeof code === "undefined") return;
   return Airport.airportCodeHash[code.toUpperCase()];
 }
-/*
+
+/* 
  * Airport.fetchAirportsByCity()
- */
+ * Fetch an airport model given a city
+ */ 
 Airport.fetchAirportsByCity = function(city, callback) {
   
   //  Callback is required, as the fetch is async
@@ -93,8 +123,9 @@ Airport.fetchAirportsByCity = function(city, callback) {
   }   
 }
 
-/*
+/* 
  * Airport.storeCSVRows()
+ * Iterate and store csv rows as backbone models
  */
 Airport.storeCSVRows = function(csvRows) {
   // iterate through the airport objects and create backbone models
@@ -107,7 +138,11 @@ Airport.storeCSVRows = function(csvRows) {
   }
 }
 
-Airport.store = function (airport, csvRow) {
+/* 
+ * Airport.store()
+ * Save the backbone models, and create fast lookup hash tables
+ */
+ Airport.store = function (airport, csvRow) {
     Airport.all.push(airport);
 
   // Setup the airport hash tables
@@ -125,6 +160,7 @@ Airport.store = function (airport, csvRow) {
 
 /*
  * Airport.loadFromCSV()
+ * Load a CSV and store its contents as backbone models
  */
 Airport.loadFromCSV = function (callback) {
 

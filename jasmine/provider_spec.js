@@ -69,7 +69,7 @@ describe("Provider model spec", function() {
       expect(invalidProvider.validationError).toEqual("Missing mandatory fields: {Origin},{Departure Time},{Destination},{Destination Time},{Price}");
     }); 
 
-    it("(pending) will fail validation if there are any missing values", function () {
+    it("will fail validation if there are any missing values", function () {
       var invalidProvider = new Provider(invalidValues);
       expect(invalidProvider.isValid()).toEqual(false);
       expect(invalidProvider.validationError).toEqual("Invalid values for attributes.");

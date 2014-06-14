@@ -19,7 +19,31 @@ describe("ProviderList spec", function() {
       "Price": "$321.00"
   };
 
-  describe("ProviderList.loadFromCSV", function() {    
+  describe("ProviderList.generateKey()", function () {
+    it("generates valid unique keys for a provider", function() {
+      var provider = new Provider({
+        "Origin": "LAS",
+        "Departure Time": "6/15/2014 9:54:00",
+        "Destination": "LAX",
+        "Destination Time": "6/15/2014 11:05:00",
+        "Price": "$321.00"
+      });
+      expect(ProviderList.generateKey(provider)).toEqual("1402840440000_1402844700000_LAS_LAX");
+    });
+  });
+
+  describe("ProviderList.clear()", function(){
+    it("clears the Provider arrays ", function () {
+      Provider.all=['one'];
+      Provider.originHash={"two":2};
+      Provider.destHash = {"three": 3};
+      expect(ProviderList.count()).toEqual(1);
+      ProviderList.clear();
+      expect(ProviderList.count()).toEqual(0);      
+    });
+  });
+
+  describe("ProviderList.loadFromCSV()", function() {    
 
     it("rejects invalid filenames ", function () {
       var filename = "../notadirectory/provider1.txt";
@@ -64,23 +88,16 @@ describe("ProviderList spec", function() {
     }); 
   });
 
-  describe("ProviderList.keepCheapest", function() {        
+  describe("ProviderList.keepCheapest()", function() {        
 
     it("keep the cheapest flight when added to the store", function () {
       ProviderList.clear();
       ProviderList.loadFromCSV("../data/provider3.txt");
 
-      // Create a cheap flight, but don't add it to the list yet
-      var cheapieProvider = new Provider(cheaperFlight);
       
-      // The price originally is 286
-      expect(exampleProvider.getPrice()).toEqual(286);      
-
-      // Add the cheap flight to the list
-      ProviderList.store(cheapieProvider);
-      
-      // We should expect the provider count to remain the same
-      expect(ProviderList.count()).toEqual(14);
+      var cheapieProvider = new Provider(cheaperFlight); // Create a cheap flight
+      ProviderList.store(cheapieProvider); // Add the cheap flight to the list        
+      expect(ProviderList.count()).toEqual(14); // Provider count to remain the same
 
       // Grab the example, and expect the cheaper price
       var winner = Provider.all['1402840440000_1402844700000_LAS_LAX'];
@@ -91,17 +108,9 @@ describe("ProviderList spec", function() {
       ProviderList.clear();
       ProviderList.loadFromCSV("../data/provider3.txt");
       
-      // Create a costly flight, but don't add it to the list yet
-      var costlyProvider = new Provider(costlyFlight);
-      
-      // The price originally is 286
-      expect(exampleProvider.getPrice()).toEqual(286);      
-
-      // Add the costly flight to the list
-      ProviderList.store(costlyProvider);
-      
-      // We should expect the provider count to remain the same
-      expect(ProviderList.count()).toEqual(14);
+      var costlyProvider = new Provider(costlyFlight); // Create a costly flight
+      ProviderList.store(costlyProvider); // Add the costly flight to the list      
+      expect(ProviderList.count()).toEqual(14); // Provider count to remain the same
 
       // Grab the example, and expect the cheaper price
       var winner = Provider.all['1402840440000_1402844700000_LAS_LAX'];
