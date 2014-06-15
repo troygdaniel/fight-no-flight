@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="shortcut icon" href="images/favicon.png">
+        <title>fight no flight</title>
+        <link rel="stylesheet" href="css/vendor/bootstrap.css" />
+        <link rel="stylesheet" href="css/vendor/font-awesome.css" />
+        <link rel="stylesheet" href="css/vendor/font-awesome-ie7.css" />
+        <link rel="stylesheet" href="css/overrides/bootstrap-overrides.css" />
+        <link rel="stylesheet" href="css/HTML5admin.css" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+        <script src="js/vendor/backbone/backbone.js"></script>
+        <script src="js/vendor/jquery.parse.min.js  "></script>
+        <script src="js/vendor/moment.min.js"></script>
+        <script src="js/vendor/then_by.min.js"></script>
+
+        <script src="js/app.js"></script>
+        <script src="js/airport.js"></script>
+        <script src="js/provider_search.js"></script>
+        <script src="js/provider_list.js"></script>
+        <script src="js/provider.js"></script>
+        <script src="js/provider_list_view.js"></script>
+
+        <script>
+        $(function() {
+            Airport.loadFromCSV(function(){
+              $("#flight-loading-airports").text(""+Airport.count()+" airports loaded.");
+            });
+            ProviderList.loadFromCSV("data/provider1.txt", function() {
+              $("#flight-loading-providers").text("Loading "+ProviderList.count()+" providers...");
+            });
+            ProviderList.loadFromCSV("data/provider2.txt", function() {
+              $("#flight-loading-providers").text("Loading "+ProviderList.count()+" providers...");
+            });
+            ProviderList.loadFromCSV("data/provider3.txt", function() {
+              $("#flight-loading-providers").text(""+ProviderList.count()+" providers loaded.");
+            });
+            var providerListView = new ProviderListView();
+
+        });
+        </script>
+        </head>
+        <body>
+        <center>
+<h2>Fight no Flight</h2>
+<div id="flight-search-panel">
+<br/><b>From:</b><P id="origin-code-airport"></p>
+<input type="text" id="origin-code" placeholder="Origin airport code" class="h5a-input form-control input-sm" style="width:240px">
+<br/><b>To:</b>               <P id="dest-code-airport"></p>
+<input type="text" id="dest-code" placeholder="Destination airport code" class="h5a-input form-control input-sm" style="width:240px">
+<br/>                    
+<input type="submit" id="search-btn" style="width:200px;position:relative;left:0px" class="create-room-button h5a-btn btn  btn-lg btn-primary full" value="Search">
+<br/><br/>
+<p>
+    <div id="search-results" class="hidden">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Origin</th>
+              <th>Destination</th>
+              <th>Departure Time</th>
+              <th>Destination Time</th>
+              <th>Duration</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody id="flight-result-rows">            
+            <tr class="hidden" id="template_row">
+              <td class="origin_column"></td>
+              <td class="dest_column"></td>
+              <td class="depart_time_column"></td>
+              <td class="dest_time_column"></td>
+              <td class="duration_column"></td>
+              <td class="price_column"></td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+</div>
+
+
+    </center>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        
+    </body>
+</html>

@@ -19,6 +19,10 @@ summary {
     display: block;
 }
 
+.hidden {
+    display: none;
+}
+
 #shell-panel {
   width: 90%;
   background-color: #002f05;

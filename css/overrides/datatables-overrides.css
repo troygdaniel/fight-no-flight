@@ -1,0 +1,89 @@
+/* 
+ * 
+ * This is the HTML5 Admin override file for dataTables CSS
+ * 
+ */
+/* import HTML5 Variables (for colors, etc.) */
+/* override colors and texts */
+.dataTables_wrapper input {
+  border: 1px solid #e7e7e7;
+}
+.dataTables_wrapper label {
+  color: #716b7a;
+  font-weight: 200;
+}
+.dataTables_info,
+.dataTables_paginate {
+  color: #716b7a;
+  font-weight: 200;
+  font-size: 12px;
+  margin-top: 14px;
+  line-height: 21px;
+}
+table.dataTable thead th {
+  padding: 5px 18px 5px 10px;
+  border-bottom: 1px solid black;
+  font-weight: 200;
+  cursor: pointer;
+  font-size: 16px;
+  color: black;
+  background-color: white;
+  letter-spacing: 0.1em;
+}
+table.dataTable {
+  border: 1px solid #e7e7e7;
+}
+table.dataTable td {
+  padding: 5px 10px;
+}
+/* overrides for background */
+table.dataTable tr.odd {
+  background: transparent;
+}
+table.dataTable tr.even {
+  background: white;
+}
+table.dataTable tr.odd td.sorting_1 {
+  background: #e7e7e7;
+}
+table.dataTable tr.even td.sorting_1 {
+  background: #f8f8f8;
+}
+/* override images paths */
+.paginate_enabled_previous {
+  background: url('../../images/vendor/datatables/back_enabled.png') no-repeat top left;
+}
+.paginate_enabled_previous:hover {
+  background: url('../../images/vendor/datatables//back_enabled_hover.png') no-repeat top left;
+}
+.paginate_disabled_previous {
+  color: #e7e7e7 !important;
+  background: url('../../images/vendor/datatables//back_disabled.png') no-repeat top left;
+}
+.paginate_enabled_next {
+  background: url('../../images/vendor/datatables//forward_enabled.png') no-repeat top right;
+}
+.paginate_enabled_next:hover {
+  background: url('../../images/vendor/datatables//forward_enabled_hover.png') no-repeat top right;
+}
+.paginate_disabled_next {
+  color: #e7e7e7 !important;
+  background: url('../../images/vendor/datatables//forward_disabled.png') no-repeat top right;
+}
+.sorting {
+  background: url('../../images/vendor/datatables//sort_both.png') no-repeat center right;
+}
+.sorting_asc {
+  color: black;
+  background: url('../../images/vendor/datatables//sort_asc.png') no-repeat center right;
+}
+.sorting_desc {
+  color: black;
+  background: url('../../images/vendor/datatables//sort_desc.png') no-repeat center right;
+}
+.sorting_asc_disabled {
+  background: url('../../images/vendor/datatables//sort_asc_disabled.png') no-repeat center right;
+}
+.sorting_desc_disabled {
+  background: url('../../images/vendor/datatables//sort_desc_disabled.png') no-repeat center right;
+}

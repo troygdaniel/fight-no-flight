@@ -26,6 +26,9 @@ var Airport = Backbone.Model.extend({
               
       if (options.url)
         return Backbone.sync.call(model, method, model, options);
+  },
+  humanReadable: function() {
+    return this.get("name")+", " + this.get("city")+", " + this.get("country") + " ("+this.get("timezone")+":00)";
   }
 });
 

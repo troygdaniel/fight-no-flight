@@ -64,7 +64,7 @@ shell.setCommandHandler("searchFlights", {
         var arg = args[0] || '';
         var origin = findArgument("-o",args);
         var dest = findArgument("-d",args);
-        var response = providerListView.flightsBetween(origin, dest);
+        var response = providerListView.cliFlightsBetween(origin, dest);
         callback(response);
     }
 });
@@ -76,7 +76,7 @@ shell.setCommandHandler("airport", {
         if (args[0]) { 
           response = "Airport '"+args[0].toUpperCase()+"' not found.";
           if (airport) {
-            response =  airport.get("name")+", " + airport.get("city")+", " + airport.get("country") + " ["+airport.get("timezone")+":00]";
+            response =  airport.humanReadable();
           }
         }
         callback(response);
