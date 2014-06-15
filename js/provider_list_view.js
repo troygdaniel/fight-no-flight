@@ -84,15 +84,16 @@ var ProviderListView = Backbone.View.extend({
    *  cliFlightsBetween()
    */
   cliFlightsBetween: function(origin, dest) {
-    origin = origin.toUpperCase();
-    dest = dest.toUpperCase();
-    var response = "Searching for flights from '"+origin+"' to '"+dest+"'<br/>";
-
-    if (!origin || !dest)
+    if (!origin || !dest) {
       return    "Missing required arguments:<BR>" + 
                 "-o   Origin Airport Code<BR>" +
                 "-d   Destination Airport Code<br/><br/>" +
                 "Example usage:<br/>$ searchFlights -o LAS -d LAX<br/>";
+    }
+    origin = origin.toUpperCase();
+    dest = dest.toUpperCase();
+    var response = "Searching for flights from '"+origin+"' to '"+dest+"'<br/>";
+
 
     var flights = ProviderSearch.flightsBetween(origin, dest);
     if (!flights || flights.length===0) {
