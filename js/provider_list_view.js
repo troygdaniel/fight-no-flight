@@ -32,24 +32,36 @@ var ProviderListView = Backbone.View.extend({
       $("#search-results").removeClass("hidden");
   },
   showAirportInformation: function(originCode, destCode) {
-    if (originCode.length < 3) return;
+    if (originCode.length < 3) {
+      $("#origin-code-airport").html("Any origin");
+      return;
+    }
     var originAirport = Airport.withCode(originCode);
-    if (originAirport) $("#origin-code-airport").html(originAirport.humanReadable());
     
-    if (destCode.length < 3) return;
+    if (originAirport) 
+      $("#origin-code-airport").html(originAirport.humanReadable());
+    
+    if (destCode.length < 3) {
+      $("#dest-code-airport").html("Any destination");
+      return;
+    }
     var destAirport = Airport.withCode(destCode);
-    if (destAirport) $("#dest-code-airport").html(destAirport.humanReadable());
+    if (destAirport) 
+      $("#dest-code-airport").html(destAirport.humanReadable());
   },
   /*
    *  flightsBetween()
    */
   flightsBetween: function(originCode, destCode) {
-    if(originCode && !destCode)
-      return ProviderSearch.flightsWithOrigin(originCode);
-    if(destCode && !originCode)
+
+    if (destCode && (!originCode || originCode.length != 3) && destCode.length === 3)
       return ProviderSearch.flightsWithDestination(destCode);
+
+    if (originCode && originCode.length === 3 && (!destCode || destCode.length != 3))
+      return ProviderSearch.flightsWithOrigin(originCode);
     
-    return ProviderSearch.flightsBetween(originCode, destCode);
+    if (originCode && originCode.length === 3 && (destCode && destCode.length === 3))
+      return ProviderSearch.flightsBetween(originCode, destCode);
   },
   tableRowForFlight: function(flight) {
     var $template = $("#template_row");

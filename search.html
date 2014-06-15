@@ -45,24 +45,31 @@
         });
         </script>
         </head>
-        <body>
-        <center>
-<h2>Fight no Flight</h2>
-<div id="flight-search-panel">
-<br/><b>From:</b><P id="origin-code-airport"></p>
-<input type="text" id="origin-code" placeholder="Origin airport code" class="h5a-input form-control input-sm" style="width:240px">
-<br/><b>To:</b>               <P id="dest-code-airport"></p>
-<input type="text" id="dest-code" placeholder="Destination airport code" class="h5a-input form-control input-sm" style="width:240px">
-<br/>                    
-<input type="submit" id="search-btn" style="width:200px;position:relative;left:0px" class="create-room-button h5a-btn btn  btn-lg btn-primary full" value="Search">
-<br/><br/>
-<p>
+        <body style="margin-left:30px">
+    <h2>Flight search</h2>
+    <div id="flight-search-panel">    
+    <div class="input-group" style="width:80%;">
+      <span class="input-group-btn">
+        <button  disabled style="width:60px" class="h5a-btn btn btn-primary">From</button>
+      </span>
+      <input type="text" maxlength="3" id="origin-code" class="h5a-input form-control" placeholder="Origin airport code">
+    </div>
+    <span style="color:gray;position:relative;left:65px" id="origin-code-airport"></span>
+    <br/><br/>
+    <div class="input-group" style="width:80%;">
+      <span class="input-group-btn">
+        <button style="width:60px" disabled class="h5a-btn btn btn-primary">To</button>
+      </span>
+      <input type="text" maxlength="3"  id="dest-code" class="h5a-input form-control" placeholder="Destination airport code">
+    </div>
+    <span style="color:gray;position:relative;left:65px" id="dest-code-airport"></span>    
+    <br/><hr/>
+
     <div id="search-results" class="hidden">
         <table class="table">
           <thead>
             <tr>
-              <th>Origin</th>
-              <th>Destination</th>
+              <th>From <span class="glyphicon glyphicon-arrow-right"></span>To</th>
               <th>Departure Time</th>
               <th>Destination Time</th>
               <th>Duration</th>
@@ -71,8 +78,11 @@
           </thead>
           <tbody id="flight-result-rows">            
             <tr class="hidden" id="template_row">
-              <td class="origin_column"></td>
-              <td class="dest_column"></td>
+              <td>
+                <span class="origin_column"></span> 
+                <span class="glyphicon glyphicon-arrow-right"></span> 
+                <span class="dest_column"></span>
+              </td>
               <td class="depart_time_column"></td>
               <td class="dest_time_column"></td>
               <td class="duration_column"></td>
@@ -84,7 +94,7 @@
 </div>
 
 
-    </center>
+    
         <script src="js/vendor/bootstrap.min.js"></script>
         
     </body>
