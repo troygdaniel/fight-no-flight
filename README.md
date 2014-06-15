@@ -11,7 +11,7 @@ Simple Web UI:
 
 
 Jasmine tests can be run here:
-- http://troygdaniel.com/fight-no-flight/jasmine/spec_runner.html
+- http://troygdaniel.com/flight/jasmine/spec_runner.html
 
 
 There are 5 relevant classes:
