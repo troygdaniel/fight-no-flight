@@ -1,11 +1,16 @@
 fight-no-flight
 ===============
 
+## Running examples:
+CLI desktop browser can be found here:
+http://troygdaniel.com/fight-no-flight/
+
+Simple Web UI:
+
+http://troygdaniel.com/fight-no-flight/search.html
 Running examples using jasmine:
 http://troygdaniel.com/fight-no-flight/jasmine/spec_runner.html
 
-CLI desktop browser can be found here:
-http://troygdaniel.com/fight-no-flight/
 
 There are 5 relevant classes:
 - __Airport__ both a backbone model, and class methods to load all data
@@ -65,9 +70,6 @@ The classes and instance variable names were intentionally lifted from the requi
 
 ## Relevant test cases:
   https://github.com/troygdaniel/fight-no-flight/tree/master/jasmine
-
-## Running example:
-  http://troygdaniel.com/fight-no-flight/
 
 ## JS source code:
   https://github.com/troygdaniel/fight-no-flight/tree/master/js
