@@ -3,14 +3,14 @@ fight-no-flight
 
 ## Running examples:
 CLI desktop browser can be found here:
-- http://troygdaniel.com/fight-no-flight/
+- http://troygdaniel.com/flight_cli/
 
 
 Simple Web UI:
-- http://troygdaniel.com/fight-no-flight/search.html
+- http://troygdaniel.com/flight
 
 
-Running examples using jasmine:
+Jasmine tests can be run here:
 - http://troygdaniel.com/fight-no-flight/jasmine/spec_runner.html
 
 
