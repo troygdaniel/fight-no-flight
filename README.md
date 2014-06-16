@@ -36,7 +36,7 @@ Airport.loadFromCSV(function(){
 var providerListView = new ProviderListView();
 
 // Get the CLI response for flights between YYZ and YYC
-var textResponse = providerListView.flightsBetween("YYZ", "YYC");
+var textResponse = providerListView.cliFlightsBetween("YYZ", "YYC");
 // output:
 // YYZ --> YYC (06/15/2014 06:45:00 --> 06/15/2014 08:54:00) - 4h 09m - $578.00
 // YYZ --> YYC (06/22/2014 12:00:00 --> 06/22/2014 14:09:00) - 4h 09m - $630.00
