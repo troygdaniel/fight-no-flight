@@ -19,7 +19,7 @@ There are 5 relevant classes:
 - __Provider__ the backbone model for the provider csv row
 - __ProviderList__ manages access to the global (in-memory) array of providers
 - __ProviderSearch__ provides searching capability based on origin and destination
-- __ProviderListView__ renders simple CLI text responses
+- __ProviderListView__ renders simple CLI text responses and a Web UI
 
 Here is how you would implement the above classes:
 ```javascript
